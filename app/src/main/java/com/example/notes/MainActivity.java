@@ -18,12 +18,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
+
+    private long pressedTime;
+
+    static boolean isFingerPrintAuthOn = true;
 
     static ArrayList<String> notes = new ArrayList<>();
     static ArrayAdapter arrayAdapter;
@@ -85,6 +90,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        Log.d("Finger main oncreate", String.valueOf(isFingerPrintAuthOn));
+    }
+
+    // This is to exit the app after 2 back button press
+    public void onBackPressed() {
+
+        if (pressedTime + 2000 > System.currentTimeMillis()) {
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+        }
+        pressedTime = System.currentTimeMillis();
     }
 
     //MENU
@@ -108,34 +129,45 @@ public class MainActivity extends AppCompatActivity {
 
                 return true;
 
+            // TODO: 7/17/2022 bug in settings to enable or disable finger print auth  
             case R.id.enable_fingerprint_auth:
-                SharedPreferences fingerPrintPreferences = getSharedPreferences("FingerPrint", 0);
-                SharedPreferences.Editor sharedPrefsEdit = fingerPrintPreferences.edit();
-                boolean isFingerPrintAuthOn = fingerPrintPreferences.getBoolean("FingerprintAuth", false);
+                SharedPreferences fingerPrintPreferences = getSharedPreferences("FingerPrint", Context.MODE_PRIVATE);
+                SharedPreferences.Editor fingerPrintPrefsEdit = fingerPrintPreferences.edit();
+                isFingerPrintAuthOn = fingerPrintPreferences.getBoolean("FingerprintAuth", false);
+
+                Intent  launcherIntent = new Intent(Intent.ACTION_MAIN);
+
+                Log.i("Finger main activity", String.valueOf(isFingerPrintAuthOn));
 
                 if(isFingerPrintAuthOn){
-                    sharedPrefsEdit.putBoolean("FingerprintAuth", false);
+                    launcherIntent.removeCategory(Intent.CATEGORY_LAUNCHER);
+
+                    fingerPrintPrefsEdit.putBoolean("FingerprintAuth", false);
                 }else{
-                    sharedPrefsEdit.putBoolean("FingerprintAuth", true);
+                    launcherIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    launcherIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    fingerPrintPrefsEdit.putBoolean("FingerprintAuth", true);
                 }
-                sharedPrefsEdit.apply();
+                fingerPrintPrefsEdit.apply();
+                fingerPrintPrefsEdit.commit();
 
                 return true;
             case R.id.dark_mode_switch:
                 Log.i("Item Selected", "Dark Mode");
 
-                SharedPreferences appSettingsPreference = getSharedPreferences("AppSettingPrefs", 0);
-                SharedPreferences.Editor sharedPrefEdit = appSettingsPreference.edit();
-                boolean isNightModeOn = appSettingsPreference.getBoolean("NightMode", false);
+                SharedPreferences appSettingsPreferences = getSharedPreferences("AppSettingPrefs", 0);
+                SharedPreferences.Editor sharedPrefsEdit = appSettingsPreferences.edit();
+                boolean isNightModeOn = appSettingsPreferences.getBoolean("NightMode", false);
 
                 if(isNightModeOn){
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    sharedPrefEdit.putBoolean("NightMode", false);
+                    sharedPrefsEdit.putBoolean("NightMode", false);
                 }else{
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    sharedPrefEdit.putBoolean("NightMode", true);
+                    sharedPrefsEdit.putBoolean("NightMode", true);
                 }
-                sharedPrefEdit.apply();
+                sharedPrefsEdit.apply();
 
                 return true;
         }

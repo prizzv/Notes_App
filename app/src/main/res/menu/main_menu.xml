@@ -7,11 +7,11 @@
         android:title="@string/enable_finger_print" />
 
     <item
-        android:id="@+id/add_note"
-        android:title="Add Note" />
-
-    <item
         android:id="@+id/dark_mode_switch"
         android:title="@string/dark_mode" />
+
+    <item
+        android:id="@+id/add_note"
+        android:title="Add Note" />
 
 </menu>

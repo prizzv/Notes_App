@@ -1,5 +1,9 @@
 package com.example.notes;
 
+import static com.example.notes.MainActivity.isFingerPrintAuthOn;
+
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -28,11 +32,12 @@ public class FingerPrintActivity extends AppCompatActivity {
 
         TextView msgtex = findViewById(R.id.msgtext);
         final Button loginbutton = findViewById(R.id.login);
-        SharedPreferences appSettingsPreferences = getSharedPreferences("FingerPrint", 0);
-        boolean fingerPrintAuth = appSettingsPreferences.getBoolean("FingerPrintAuth", false);
-        Log.i("finger", String.valueOf(fingerPrintAuth));
 
-        if(fingerPrintAuth) {
+        SharedPreferences appSettingsPreferences = getSharedPreferences("FingerPrint", Context.MODE_PRIVATE);
+
+        Log.i("finger", String.valueOf(isFingerPrintAuthOn));
+
+        if(isFingerPrintAuthOn) {
             //check if user can use biometric sensor or not
             BiometricManager biometricManager = androidx.biometric.BiometricManager.from(this);
             switch (biometricManager.canAuthenticate()) {
