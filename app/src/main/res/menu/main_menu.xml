@@ -3,6 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/enable_fingerprint_auth"
+        android:title="@string/enable_finger_print" />
+
+    <item
         android:id="@+id/add_note"
         android:title="Add Note" />
+
+    <item
+        android:id="@+id/dark_mode_switch"
+        android:title="@string/dark_mode" />
+
 </menu>

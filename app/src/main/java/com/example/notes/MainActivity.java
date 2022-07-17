@@ -3,12 +3,14 @@ package com.example.notes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    // To delete a note
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_note_menu, menu);
+        menuInflater.inflate(R.menu.main_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -98,12 +101,46 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if(item.getItemId() == R.id.add_note){
-            Intent intent = new Intent(getApplicationContext(), NotesEditActivity.class);
-            startActivity(intent);
+        switch(item.getItemId()) {
+            case R.id.add_note:
+                Intent intent = new Intent(getApplicationContext(), NotesEditActivity.class);
+                startActivity(intent);
 
-            return true;
+                return true;
+
+            case R.id.enable_fingerprint_auth:
+                SharedPreferences fingerPrintPreferences = getSharedPreferences("FingerPrint", 0);
+                SharedPreferences.Editor sharedPrefsEdit = fingerPrintPreferences.edit();
+                boolean isFingerPrintAuthOn = fingerPrintPreferences.getBoolean("FingerprintAuth", false);
+
+                if(isFingerPrintAuthOn){
+                    sharedPrefsEdit.putBoolean("FingerprintAuth", false);
+                }else{
+                    sharedPrefsEdit.putBoolean("FingerprintAuth", true);
+                }
+                sharedPrefsEdit.apply();
+
+                return true;
+            case R.id.dark_mode_switch:
+                Log.i("Item Selected", "Dark Mode");
+
+                SharedPreferences appSettingsPreference = getSharedPreferences("AppSettingPrefs", 0);
+                SharedPreferences.Editor sharedPrefEdit = appSettingsPreference.edit();
+                boolean isNightModeOn = appSettingsPreference.getBoolean("NightMode", false);
+
+                if(isNightModeOn){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    sharedPrefEdit.putBoolean("NightMode", false);
+                }else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    sharedPrefEdit.putBoolean("NightMode", true);
+                }
+                sharedPrefEdit.apply();
+
+                return true;
         }
+
+
         return false;
     }
 }
