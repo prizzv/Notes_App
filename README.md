@@ -7,3 +7,5 @@ Fingerprint is taken from the android phone and matched with the users fingerpri
 
 
 ![Demo](https://user-images.githubusercontent.com/84437216/182026307-507f4006-6bf2-4367-8018-d2800672ea5d.gif)
+
+<p><img align = "center" src="https://user-images.githubusercontent.com/84437216/182026307-507f4006-6bf2-4367-8018-d2800672ea5d.gif" width = "500" height="320"/></p>
