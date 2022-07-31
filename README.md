@@ -5,7 +5,6 @@ This is a simple notes app in which you can toggle on or off the fingerprint aut
 
 Fingerprint is taken from the android phone and matched with the users fingerprint.
 
+<!-- ![Demo](https://user-images.githubusercontent.com/84437216/182026307-507f4006-6bf2-4367-8018-d2800672ea5d.gif) -->
 
-![Demo](https://user-images.githubusercontent.com/84437216/182026307-507f4006-6bf2-4367-8018-d2800672ea5d.gif)
-
-<p><img align = "center" src="https://user-images.githubusercontent.com/84437216/182026307-507f4006-6bf2-4367-8018-d2800672ea5d.gif" width = "500" height="320"/></p>
+<p><img align = "center" src="https://user-images.githubusercontent.com/84437216/182026307-507f4006-6bf2-4367-8018-d2800672ea5d.gif" width = "320" height="500"/></p>
